@@ -1,6 +1,7 @@
 package main
 
 import (
+	"elearning-api/configs"
 	"log"
 
 	"gorm.io/driver/mysql"
@@ -8,7 +9,7 @@ import (
 )
 
 func main() {
-	dsn := "uSNF:uSNF@tcp(127.0.0.1:3306)/e_learning?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := configs.Dsn()
 	_, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {

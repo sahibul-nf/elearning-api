@@ -1,4 +1,4 @@
-module comments-service-api
+module elearning-api
 
 go 1.16
 
