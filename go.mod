@@ -1,4 +1,4 @@
-module comments-service
+module comments-service-api
 
 go 1.16
 
