@@ -3,8 +3,10 @@ package main
 import (
 	"elearning-api/comment"
 	"elearning-api/configs"
+	"elearning-api/handler"
 	"log"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -17,12 +19,25 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
+	// commentRepository := comment.NewRepository(db)
+
+	// comment := comment.Comment{
+	// 	Comment: "Comment repo",
+	// }
+
+	// commentRepository.CreateComment(comment)
+
 	commentRepository := comment.NewRepository(db)
+	commentService := comment.NewService(commentRepository)
+	commentHandler := handler.NewcommentHandler(commentService)
 
-	comment := comment.Comment{
-		Comment: "Comment repo",
-	}
+	router := gin.Default()
+	api := router.Group("/api/v1")
 
-	commentRepository.CreateComment(comment)
+	api.POST("/comments", commentHandler.CreateComment)
+	api.GET("/comments", commentHandler.GetComments)
+	api.DELETE("/comment/{id_comment}", commentHandler.DeleteComment)
+
+	router.Run()
 
 }
