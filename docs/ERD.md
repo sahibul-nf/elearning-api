@@ -3,9 +3,9 @@
 - Users
 - Comments
 - Classes
-- Scores
-- Missions
-- SubmittedMissions
+- Forums
+- Taks
+- SubmittedTaks
 
 \`
 
@@ -27,7 +27,7 @@
     entity Comments {
         *id : INT
         --
-        class_id : INT
+        ' class_id : INT
         user_id : INT
         comment : TEXT
         created_at : DATETIME
@@ -37,79 +37,125 @@
     entity Classes {
         *id : VARCHAR, unique
         --
-        title : VARCHAR
+        user_id : INT
+        name : VARCHAR
+        course : VARCHAR
+        unit : VARCHAR
+        part : VARCHAR
+        banner_image_file_name : VARCHAR
+        created_at : DATETIME
+        updated_at : DATETIME
+    }
+
+    entity Forums {
+        *id : INT
+        --
+        user_id : INT
         description : TEXT
         created_at : DATETIME
         updated_at : DATETIME
     }
 
-    entity Scores {
+    entity Forum_Files {
         *id : INT
         --
-        score : INT
+        forum_id : INT
+        file_name : VARCHAR
         created_at : DATETIME
         updated_at : DATETIME
     }
 
-    entity Missions {
+    entity Tasks {
         *id : INT
         --
-        class_id : INT
-        score_id : INT
+        ' class_id : INT
+        user_id : INT
         title : VARCHAR
         description : TEXT
         deadline: DATETIME
-        files_name : VARCHAR
-        point_goal : INT
+        goal_point : INT
         status : ["submitted", "given", "rated"]
-        ammount_submitted : INT
-        ammount_given : INT
-        ammount_rated : INT
         created_at : DATETIME
         updated_at : DATETIME
     }
 
-    entity SubmittedMissions {
+    entity Task_Files {
         *id : INT
         --
-        mission_id : INT
-        files_name : VARCHAR
+        task_id : INT
+        file_name : VARCHAR
         created_at : DATETIME
         updated_at : DATETIME
     }
 
-    entity DetailClasses {
-        user_id : INT
-        class_id : INT
+    entity User_Submitted_Tasks {
+        *id : INT
+        --
+        user_submitted_class_id : INT
+        ' mission_id : INT
+        score : INT
+        status : ["assignmed", "submitted"]
+        created_at : DATETIME
+        updated_at : DATETIME
     }
 
-    entity DetailMissions {
-        user_id : INT
-        mission_id : INT
+    entity User_Submitted_Task_Files {
+        *id : INT
+        --
+        user_submitted_task_id : INT
+        file_name : VARCHAR
+        created_at : DATETIME
+        updated_at : DATETIME
     }
 
-    ' Table Users many to many Classes
-    Users ||--o{ DetailClasses
-    DetailClasses }|--|| Classes
+    entity Users_Classes {
+        *id : INT
+        --
+        user_id : INT
+        class_id : VARCHAR
+    }
 
-    ' Classes one to many Comments
-    Classes ||--o{ Comments
+    entity Users_Forums_Classes {
+        *id : INT
+        --
+        user_id : INT
+        forum_id : INT
+        class_id : VARCHAR
+        comment_id : INT
+    }
 
-    ' Users one to many Comments
-    Users ||--o{ Comments
+    entity Users_Tasks_Classes {
+        *id : INT
+        --
+        user_id : INT
+        task_id : INT
+        class_id : VARCHAR
+        comment_id : INT
+    }
 
-    ' Classes one to many Missions
-    Classes |o--o{ Missions
+    Users ||--o{ Classes : Create
+    Users ||--o{ Users_Classes : Has Classes
+    Users_Classes }o--|| Classes : Has Users
 
-    ' Missions one to many SubmittedMissions
-    Missions |o--|{ SubmittedMissions
+    Users ||--o{ Forums : Create
+    Users ||--|{ Users_Forums_Classes : Has Forums Classes
+    Classes ||--|{ Users_Forums_Classes : Has Users Forums
+    Users_Forums_Classes }--|| Forums : Has Users Classes
 
-    ' Users many to many Missions
-    Users ||--o{ DetailMissions
-    DetailMissions }|--|| Missions
+    Users ||--o{ Comments : Create
+    Comments ||--o{ Users_Forums_Classes : Has 
+    Comments ||--o{ Users_Tasks_Classes : Has
 
-    ' Missions one to one Scores
-    Missions ||--o| Scores
+    Users ||--o{ Tasks : Create
+    Users ||--|{ Users_Tasks_Classes : Has
+    Classes ||--|{ Users_Tasks_Classes : Has
+    Tasks ||--|{ Users_Tasks_Classes : Has
+
+    Users_Tasks_Classes ||--o{ User_Submitted_Tasks : Submit
+
+    Forums ||--o{ Forum_Files : Has
+    Tasks ||--o{ Task_Files : Has
+    User_Submitted_Tasks ||--o{ User_Submitted_Task_Files : Has
 
 @enduml
 ```
