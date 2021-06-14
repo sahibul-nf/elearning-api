@@ -18,6 +18,7 @@
         --
         name : VARCHAR
         email : VARCHAR
+        avatar_file_name : VARCHAR
         role : TINYINT
         token : VARCHAR
         created_at : DATETIME
@@ -27,7 +28,6 @@
     entity Comments {
         *id : INT
         --
-        ' class_id : INT
         user_id : INT
         forum_id : INT
         task_id : INT      
@@ -37,7 +37,7 @@
     }
 
     entity Classes {
-        *id : VARCHAR, unique
+        *id : VARCHAR,
         --
         user_id : INT
         task_id : INT
@@ -55,6 +55,7 @@
         *id : INT
         --
         user_id : INT
+        class_id : VARCHAR
         description : TEXT
         created_at : DATETIME
         updated_at : DATETIME
@@ -73,6 +74,7 @@
         *id : INT
         --
         user_id : INT
+        class_id : VARCHAR
         title : VARCHAR
         description : TEXT
         deadline: DATETIME
@@ -95,7 +97,6 @@
         *id : INT
         --
         user_id : INT
-        ' user_submitted_class_id : INT
         task_id : INT
         score : INT
         status : ["assignmed", "submitted"]
@@ -113,8 +114,8 @@
     }
 
     Users ||--o{ Classes : Create
-    Tasks ||--o{ Classes : Has
-    Forums ||--o{ Classes : Has
+    Tasks }o--o{ Classes : Has
+    Forums }o--o{ Classes : Has
 
     Users ||--o{ Forums : Create
 
