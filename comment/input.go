@@ -1,5 +1,5 @@
 package comment
 
 type CommentInput struct {
-	Comment string
+	Comment string `json:"comment" binding:"required"`
 }
