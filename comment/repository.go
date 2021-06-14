@@ -6,9 +6,11 @@ import (
 
 type Repository interface {
 	Save(comment Comment) (Comment, error)
-	// FindALl() ([]Comment, error)
+	Delete(ID int) (bool, error)
+	FindByID(ID int) (Comment, error)
 	FindByTaskID(taskID int) ([]Comment, error)
 	FindByForumID(forumID int) ([]Comment, error)
+	// FindALl() ([]Comment, error)
 }
 
 type repository struct {
@@ -63,4 +65,26 @@ func (r *repository) FindByTaskID(taskID int) ([]Comment, error) {
 	}
 
 	return comments, nil
+}
+
+func (r *repository) FindByID(ID int) (Comment, error) {
+	var comment Comment
+
+	err := r.db.First(&comment, ID).Error
+	if err != nil {
+		return comment, err
+	}
+
+	return comment, nil
+}
+
+func (r *repository) Delete(ID int) (bool, error) {
+	var comment Comment
+
+	err := r.db.Delete(&comment, ID).Error
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
