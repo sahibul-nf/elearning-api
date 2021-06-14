@@ -19,24 +19,40 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	// commentRepository := comment.NewRepository(db)
+	commentRepository := comment.NewRepository(db)
 
-	// comment := comment.Comment{
-	// 	Comment: "Comment repo",
+	// comments, _ := commentRepository.FindByForumID(0)
+
+	// fmt.Println(len(comments))
+	// for _, comment := range comments {
+	// 	fmt.Println(comment)
 	// }
 
-	// commentRepository.CreateComment(comment)
+	// comments, _ = commentRepository.FindByTaskID(0)
 
-	commentRepository := comment.NewRepository(db)
+	// fmt.Println(len(comments))
+	// for _, comment := range comments {
+	// 	fmt.Println(comment)
+	// }
+
 	commentService := comment.NewService(commentRepository)
-	commentHandler := handler.NewcommentHandler(commentService)
+
+	// comments, _ := commentService.FindCommentsByForumID(5)
+
+	// fmt.Println(len(comments))
+	// for _, comment := range comments {
+	// 	fmt.Println(comment)
+	// }
+
+	commentHandler := handler.NewCommentHandler(commentService)
 
 	router := gin.Default()
 	api := router.Group("/api/v1")
 
-	api.POST("/comments", commentHandler.CreateComment)
-	api.GET("/comments", commentHandler.GetComments)
-	api.DELETE("/comment/{id_comment}", commentHandler.DeleteComment)
+	api.POST("/comments", commentHandler.CreateNewComment)
+	api.GET("/comments/task", commentHandler.GetCommentsByTaskID)
+	api.GET("/comments/forum", commentHandler.GetCommentsByForumID)
+	// api.DELETE("/comments/:id", commentHandler.DeleteComment)
 
 	router.Run()
 
