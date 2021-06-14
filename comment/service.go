@@ -4,6 +4,7 @@ type Service interface {
 	CreateComment(input CommentInput) (Comment, error)
 	FindCommentsByTaskID(taskID int) ([]Comment, error)
 	FindCommentsByForumID(forumID int) ([]Comment, error)
+	DeleteComment(ID int) (bool, error)
 }
 
 type service struct {
@@ -45,4 +46,19 @@ func (s *service) FindCommentsByForumID(forumID int) ([]Comment, error) {
 	}
 
 	return comments, nil
+}
+
+func (s *service) DeleteComment(ID int) (bool, error) {
+
+	comment, err := s.repository.FindByID(ID)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = s.repository.Delete(comment.ID)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }

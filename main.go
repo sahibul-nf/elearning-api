@@ -4,6 +4,7 @@ import (
 	"elearning-api/comment"
 	"elearning-api/configs"
 	"elearning-api/handler"
+	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -35,11 +36,19 @@ func main() {
 	// 	fmt.Println(comment)
 	// }
 
+	// commentID, _ := commentRepository.FindByID(12)
+
+	// fmt.Println(commentID)
+
 	commentService := comment.NewService(commentRepository)
 
-	// comments, _ := commentService.FindCommentsByForumID(5)
+	comments, err := commentService.DeleteComment(17)
+	if err != nil {
+		fmt.Println(comments, err)
+	}
 
-	// fmt.Println(len(comments))
+	fmt.Println(comments)
+
 	// for _, comment := range comments {
 	// 	fmt.Println(comment)
 	// }
