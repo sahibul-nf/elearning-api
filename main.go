@@ -4,7 +4,6 @@ import (
 	"elearning-api/comment"
 	"elearning-api/configs"
 	"elearning-api/handler"
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -21,38 +20,7 @@ func main() {
 	}
 
 	commentRepository := comment.NewRepository(db)
-
-	// comments, _ := commentRepository.FindByForumID(0)
-
-	// fmt.Println(len(comments))
-	// for _, comment := range comments {
-	// 	fmt.Println(comment)
-	// }
-
-	// comments, _ = commentRepository.FindByTaskID(0)
-
-	// fmt.Println(len(comments))
-	// for _, comment := range comments {
-	// 	fmt.Println(comment)
-	// }
-
-	// commentID, _ := commentRepository.FindByID(12)
-
-	// fmt.Println(commentID)
-
 	commentService := comment.NewService(commentRepository)
-
-	comments, err := commentService.DeleteComment(17)
-	if err != nil {
-		fmt.Println(comments, err)
-	}
-
-	fmt.Println(comments)
-
-	// for _, comment := range comments {
-	// 	fmt.Println(comment)
-	// }
-
 	commentHandler := handler.NewCommentHandler(commentService)
 
 	router := gin.Default()
@@ -61,7 +29,7 @@ func main() {
 	api.POST("/comments", commentHandler.CreateNewComment)
 	api.GET("/comments/task", commentHandler.GetCommentsByTaskID)
 	api.GET("/comments/forum", commentHandler.GetCommentsByForumID)
-	// api.DELETE("/comments/:id", commentHandler.DeleteComment)
+	api.DELETE("/comments/:id", commentHandler.DeleteComment)
 
 	router.Run()
 

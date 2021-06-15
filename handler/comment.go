@@ -94,3 +94,31 @@ func (h *commentHandler) GetCommentsByForumID(c *gin.Context) {
 	response := helper.APIResponse("Successfuly get comments by that forumID", "success", http.StatusOK, formatComment)
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *commentHandler) DeleteComment(c *gin.Context) {
+	var input comment.DeleteCommentInput
+
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		errorFormatter := helper.ErrorValidationFormat(err)
+
+		errorMessage := gin.H{"errors": errorFormatter}
+
+		response := helper.APIResponse("Delete comment is failed", "error", http.StatusUnprocessableEntity, errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	comment, err := h.commentService.DeleteComment(input.ID)
+	if err != nil {
+		response := helper.APIResponse("Delete comment is failed", "error", http.StatusUnprocessableEntity, nil)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	formatter := gin.H{"is_deleted": comment}
+
+	response := helper.APIResponse("Successfuly to get campaign detail", "success", http.StatusOK, formatter)
+	c.JSON(http.StatusOK, response)
+
+}
