@@ -52,6 +52,7 @@ Request 🔥
   - Accept : application/json
 - Params :
   - forum_id
+  
 Response 🚀
 
 ```json
@@ -95,6 +96,7 @@ Request 🔥
   - Accept : application/json
 - Params :
   - task_id
+
 Response 🚀
 
 ```json
@@ -129,6 +131,8 @@ Request 🔥
 - Endpoint : `/api/v1/comments/:id`
 - Header :
   - Accept : application/json
+- Params :
+  - id
 
 Response 🚀
 
